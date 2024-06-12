@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PromoCodeFactory.Core.Abstractions.Repositories;
+using PromoCodeFactory.Core.Domain;
 using PromoCodeFactory.Core.Domain.Administration;
 using PromoCodeFactory.DataAccess.Data;
 using PromoCodeFactory.DataAccess.Repositories;
+using PromoCodeFactory.WebHost.Models;
+using PromoCodeFactory.WebHost.Models.Abstraction;
+using PromoCodeFactory.WebHost.Models.Implementations;
 
 namespace PromoCodeFactory.WebHost
 {
@@ -16,8 +20,14 @@ namespace PromoCodeFactory.WebHost
             services.AddControllers();
             services.AddSingleton(typeof(IRepository<Employee>), (x) => 
                 new InMemoryRepository<Employee>(FakeDataFactory.Employees));
-            services.AddSingleton(typeof(IRepository<Role>), (x) => 
+            services.AddSingleton(typeof(IRepository<Role>), (x) =>
                 new InMemoryRepository<Role>(FakeDataFactory.Roles));
+            services.AddTransient(typeof(ITransfer<EmployeeRequest, EmployeeResponse>), (x) =>
+                new EmployeeTransfer(
+                    x.GetRequiredService<IRepository<Employee>>(),
+                    x.GetRequiredService<IRepository<Role>>()
+                ));
+
 
             services.AddOpenApiDocument(options =>
             {

@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
+        <UserSecretsId>71f12b58-4b78-4446-bcd7-dbe4446f710e</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

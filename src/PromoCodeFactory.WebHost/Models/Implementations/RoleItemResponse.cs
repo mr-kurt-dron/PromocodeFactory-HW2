@@ -1,6 +1,7 @@
-﻿using System;
+﻿using PromoCodeFactory.WebHost.Models.Abstractions;
+using System;
 
-namespace PromoCodeFactory.WebHost.Models
+namespace PromoCodeFactory.WebHost.Models.Implementations
 {
     public class RoleItemResponse
     {

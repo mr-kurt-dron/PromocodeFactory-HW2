@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PromoCodeFactory.Core.Abstractions.Repositories;
+using PromoCodeFactory.Core.Domain;
 using PromoCodeFactory.Core.Domain.Administration;
 using PromoCodeFactory.WebHost.Models;
+using PromoCodeFactory.WebHost.Models.Abstraction;
+using PromoCodeFactory.WebHost.Models.Implementations;
 
 namespace PromoCodeFactory.WebHost.Controllers
 {
@@ -16,11 +19,11 @@ namespace PromoCodeFactory.WebHost.Controllers
     [Route("api/v1/[controller]")]
     public class EmployeesController : ControllerBase
     {
-        private readonly IRepository<Employee> _employeeRepository;
+        private readonly ITransfer<EmployeeRequest, EmployeeResponse> _transfer;
 
-        public EmployeesController(IRepository<Employee> employeeRepository)
+        public EmployeesController(ITransfer<EmployeeRequest, EmployeeResponse> transfer)
         {
-            _employeeRepository = employeeRepository;
+            _transfer = transfer;
         }
 
         /// <summary>
@@ -28,19 +31,10 @@ namespace PromoCodeFactory.WebHost.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<EmployeeShortResponse>> GetEmployeesAsync()
+        public async Task<List<EmployeeResponse>> GetEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
-
-            var employeesModelList = employees.Select(x =>
-                new EmployeeShortResponse()
-                {
-                    Id = x.Id,
-                    Email = x.Email,
-                    FullName = x.FullName,
-                }).ToList();
-
-            return employeesModelList;
+            var employees = await _transfer.SendGetList();
+            return employees.ToList();
         }
 
         /// <summary>
@@ -50,25 +44,63 @@ namespace PromoCodeFactory.WebHost.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EmployeeResponse>> GetEmployeeByIdAsync(Guid id)
         {
-            var employee = await _employeeRepository.GetByIdAsync(id);
-
-            if (employee == null)
-                return NotFound();
-
-            var employeeModel = new EmployeeResponse()
+            try
             {
-                Id = employee.Id,
-                Email = employee.Email,
-                Roles = employee.Roles.Select(x => new RoleItemResponse()
-                {
-                    Name = x.Name,
-                    Description = x.Description
-                }).ToList(),
-                FullName = employee.FullName,
-                AppliedPromocodesCount = employee.AppliedPromocodesCount
-            };
+                var employee = await _transfer.SendGet(id);
 
-            return employeeModel;
+                return employee;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployeeAsync(EmployeeRequest employee)
+        {
+            try
+            {
+                var id = await _transfer.SendCreate(employee);
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEmployeeAsync(Guid id, EmployeeRequest employee)
+        {
+            try
+            {
+                var updatedEmployee = await _transfer.SendUpdate(id, employee);
+
+                return Ok(updatedEmployee);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEmployeeAsync(Guid id)
+        {
+            try
+            {
+                await _transfer.SendDelete(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
