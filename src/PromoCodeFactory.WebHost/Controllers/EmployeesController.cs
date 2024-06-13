@@ -60,6 +60,11 @@ namespace PromoCodeFactory.WebHost.Controllers
             }
         }
 
+        /// <summary>
+        /// Создать нового сотрудника
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateEmployeeAsync(EmployeeRequest employee)
         {
@@ -74,6 +79,12 @@ namespace PromoCodeFactory.WebHost.Controllers
             }
         }
 
+        /// <summary>
+        /// Обновить существующего сотрудника по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployeeAsync(Guid id, EmployeeRequest employee)
         {
@@ -89,13 +100,18 @@ namespace PromoCodeFactory.WebHost.Controllers
             }
         }
 
+        /// <summary>
+        /// Удалить сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployeeAsync(Guid id)
         {
             try
             {
                 await _transfer.SendDelete(id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
