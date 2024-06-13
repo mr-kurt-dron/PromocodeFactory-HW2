@@ -1,13 +1,10 @@
 ﻿using PromoCodeFactory.Core.Abstractions.Repositories;
 using PromoCodeFactory.Core.Domain.Administration;
-using PromoCodeFactory.Core.Domain;
 using PromoCodeFactory.WebHost.Models.Abstraction;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using PromoCodeFactory.WebHost.Models.Abstractions;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PromoCodeFactory.WebHost.Models.Implementations
 {

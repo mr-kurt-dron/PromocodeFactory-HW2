@@ -1,11 +1,6 @@
-﻿using PromoCodeFactory.Core.Abstractions;
-using PromoCodeFactory.Core.Domain.Administration;
-using PromoCodeFactory.WebHost.Models.Abstraction;
+﻿using PromoCodeFactory.WebHost.Models.Abstraction;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PromoCodeFactory.WebHost.Models.Implementations
 {

@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PromoCodeFactory.Core.Abstractions.Repositories;
-using PromoCodeFactory.Core.Domain;
-using PromoCodeFactory.Core.Domain.Administration;
-using PromoCodeFactory.WebHost.Models;
 using PromoCodeFactory.WebHost.Models.Abstraction;
 using PromoCodeFactory.WebHost.Models.Implementations;
 

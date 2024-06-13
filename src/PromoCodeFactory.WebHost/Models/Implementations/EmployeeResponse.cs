@@ -1,5 +1,4 @@
 ﻿using PromoCodeFactory.WebHost.Models.Abstractions;
-using System;
 
 namespace PromoCodeFactory.WebHost.Models.Implementations
 {
